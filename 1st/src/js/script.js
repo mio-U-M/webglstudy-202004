@@ -32,7 +32,6 @@ manager.on("rotate", () => {
 });
 
 manager.on("stop", () => {
-    gsap.set(".js-titlewrap", { opacity: 1 });
     texttl.play("beginning");
 });
 
