@@ -54,8 +54,6 @@ export default class WebglManager extends EventEmitter {
         gsap.ticker.add(time => {
             this.renderer.render(this.scene, this.camera);
 
-            // this.meshList.forEach(mesh => {});
-
             if (this.isSpaceDown) {
                 this.meshList.forEach((mesh, i) => {
                     mesh.rotation.x += 0.07 * mesh.param;

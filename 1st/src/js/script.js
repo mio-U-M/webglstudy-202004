@@ -12,7 +12,8 @@ manager.init();
 // animation
 const tl = gsap.timeline();
 let texttl;
-tl.to(".js-title", 0.8, { yPercent: 0, ease: "sine.in" }, 0.3)
+tl.set(".js-title", { opacity: 1 }, 0.3)
+    .to(".js-title", 0.8, { yPercent: 0, ease: "sine.in" }, 0.4)
     .to(".js-overlay", 0.8, { opacity: 0, ease: "sine.in" }, "+=0.0")
     .to(
         ".js-gradient",
