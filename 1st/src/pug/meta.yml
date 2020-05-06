@@ -1,12 +1,11 @@
 # このサイト全体のタイトル
-site_name: mt-basic-starter
+site_name: webglstudy-202004-01
 
 # meta description（og:description・twitter:descriptionでも使用）
-description: mt-basic-starter web page.
+description: webgl school assignment 01
 
 # meta keywords
 keywords: []
-
 # カノニカル・og:urlなどで使われる、このサイトのURL
 # （複数ページあるサイトでは、全てに同じURLを入れないように）
 # url: http://example.com/
