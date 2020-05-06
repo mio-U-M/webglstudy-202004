@@ -1,5 +1,6 @@
 import gsap from "gsap";
 import * as THREE from "three";
+import EventEmitter from "events";
 // import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 // import { easing } from "../lib/easing";
 
@@ -32,8 +33,10 @@ const MATERIAL_PARAM = {
     color: 0xe0007f
 };
 
-export default class WebglManager {
+export default class WebglManager extends EventEmitter {
     constructor(canvas) {
+        super();
+
         this.canvas = canvas;
 
         this.renderer = null;
@@ -72,13 +75,23 @@ export default class WebglManager {
         });
         // key
         window.addEventListener("keydown", eve => {
-            if (eve.key === " ") this.isSpaceDown = true;
+            if (eve.key === " ") {
+                this.emit("rotate");
+                this.isSpaceDown = true;
+            }
         });
         window.addEventListener("keyup", eve => {
             if (this.isSpaceDown) {
                 this.isSpaceDown = false;
                 this.meshList.forEach(mesh => {
-                    gsap.to(mesh.rotation, 0.5, { x: 0, y: 0, z: 0 });
+                    gsap.to(mesh.rotation, 0.5, {
+                        x: 0,
+                        y: 0,
+                        z: 0,
+                        onComplete: () => {
+                            this.emit("stop");
+                        }
+                    });
                 });
             }
         });
