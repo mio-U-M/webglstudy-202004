@@ -35,12 +35,6 @@ export default class WebglManager {
         this.camera = null;
         this.light = null;
 
-        this.uniforms = null;
-
-        this.color1 = [...this.hexToRgb(COLOR_PALLETE.vividpurple)];
-        this.color2 = [...this.hexToRgb(COLOR_PALLETE.skyblue)];
-        this.color3 = [...this.hexToRgb(COLOR_PALLETE.pinkred)];
-
         this.sphereMeshList = [];
     }
 
@@ -48,20 +42,20 @@ export default class WebglManager {
         this.setupWebgl();
         this.resize();
 
-        gsap.ticker.add(time => {
-            this.uniforms.uTime.value = time;
-            this.renderer.render(this.scene, this.camera);
+        // gsap.ticker.add(time => {
+        //     this.uniforms.uTime.value = time;
+        //     this.renderer.render(this.scene, this.camera);
 
-            if (this.sphereMeshList) {
-                this.sphereMeshList.forEach(mesh => {
-                    mesh.position.x += Math.cos(time) * Math.random() * 0.001;
-                    mesh.position.y +=
-                        easing.easeInOutCubic(Math.sin(time * 0.1)) *
-                        Math.random() *
-                        0.001;
-                });
-            }
-        });
+        //     if (this.sphereMeshList) {
+        //         this.sphereMeshList.forEach(mesh => {
+        //             mesh.position.x += Math.cos(time) * Math.random() * 0.001;
+        //             mesh.position.y +=
+        //                 easing.easeInOutCubic(Math.sin(time * 0.1)) *
+        //                 Math.random() *
+        //                 0.001;
+        //         });
+        //     }
+        // });
 
         window.addEventListener("resize", () => {
             this.resize();
@@ -81,70 +75,20 @@ export default class WebglManager {
             window.innerWidth / window.innerHeight
         );
         this.camera.position.set(0, 0, +14);
-        // plane
-        this.planeGeometry = new THREE.PlaneBufferGeometry(10, 10);
         // spehre
-        this.sphereGeometry = new THREE.SphereGeometry(1.0, 32, 32);
-
-        this.uniforms = {
-            uResolution: { type: "v2", value: new THREE.Vector2() },
-            uTime: { type: "f", value: 0 },
-            uColor1: {
-                type: "v3",
-                value: new THREE.Vector3(
-                    this.color1[0],
-                    this.color1[1],
-                    this.color1[2]
-                )
-            },
-            uColor2: {
-                type: "v3",
-                value: new THREE.Vector3(
-                    this.color2[0],
-                    this.color2[1],
-                    this.color2[2]
-                )
-            },
-            uColor3: {
-                type: "v3",
-                value: new THREE.Vector3(
-                    this.color3[0],
-                    this.color3[1],
-                    this.color3[2]
-                )
-            },
-            uNoiseOffset1: { type: "f", value: 2.8 },
-            uNoiseOffset2: { type: "f", value: 1.2 },
-            uNoiseOffset3: { type: "f", value: 1.8 }
-        };
-        this.gradientShaderMaterial = new THREE.RawShaderMaterial({
-            uniforms: this.uniforms,
-            fragmentShader: gradientFrag,
-            vertexShader: vert
-        });
+        this.geometry = new THREE.BoxGeometry(16.0, 16.0, 16.0);
 
         // マテリアルのパラメータ
         const MATERIAL_PARAM = {
-            color: 0xffffff,
+            color: 0xff00ff,
             specular: 0xffffff
         };
-        const samplemesh = new THREE.MeshPhongMaterial(MATERIAL_PARAM);
-
-        const textuerLoader = new THREE.TextureLoader();
-        this.mat = new THREE.MeshPhongMaterial();
-
-        textuerLoader.load(`${IMG_DIR}/3d_graphic_texture.jpg`, tex => {
-            this.mat.map = tex;
-            this.planeMesh = new THREE.Mesh(this.planeGeometry, this.mat);
-            this.planeMesh.position.set(0.0, 0.0, 0.0);
-            this.scene.add(this.planeMesh);
-        });
 
         SPHERE_POS.forEach(pos => {
-            const sphereMesh = new THREE.Mesh(this.sphereGeometry, samplemesh);
-            sphereMesh.position.set(pos.x, pos.y, pos.z);
-            this.scene.add(sphereMesh);
-            this.sphereMeshList.push(sphereMesh);
+            const mesh = new THREE.Mesh(this.geometry, MATERIAL_PARAM);
+            mesh.position.set(pos.x, pos.y, pos.z);
+            this.scene.add(mesh);
+            this.sphereMeshList.push(mesh);
         });
 
         this.light = new THREE.DirectionalLight(
@@ -174,9 +118,6 @@ export default class WebglManager {
 
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
-
-        this.uniforms.uResolution.value.x = this.renderer.domElement.width;
-        this.uniforms.uResolution.value.y = this.renderer.domElement.height;
     }
 
     hexToRgb(color) {
