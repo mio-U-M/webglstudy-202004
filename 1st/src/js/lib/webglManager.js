@@ -1,10 +1,7 @@
 import gsap from "gsap";
-import vert from "../../shader/vertics.vert";
-import gradientFrag from "../../shader/gradient.frag";
-import { IMG_DIR } from "../../constants.yml";
 import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { easing } from "../lib/easing";
+// import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+// import { easing } from "../lib/easing";
 
 const DIRECTIONAL_LIGHT_PARAM = {
     color: 0xffffff,
@@ -96,7 +93,7 @@ export default class WebglManager {
 
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(
-            60,
+            70,
             window.innerWidth / window.innerHeight
         );
         this.camera.position.set(0, 0, +10);
@@ -134,10 +131,10 @@ export default class WebglManager {
         const axes = new THREE.AxesHelper(25);
         this.scene.add(axes);
 
-        this.controls = new OrbitControls(
-            this.camera,
-            this.renderer.domElement
-        );
+        // this.controls = new OrbitControls(
+        //     this.camera,
+        //     this.renderer.domElement
+        // );
     }
 
     resize() {
