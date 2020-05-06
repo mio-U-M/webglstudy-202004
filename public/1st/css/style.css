@@ -65,7 +65,8 @@ body {
     color: #fff;
     overflow: hidden; }
     .header p span {
-      display: block; }
+      display: block;
+      opacity: 0; }
 
 .container {
   position: relative;
