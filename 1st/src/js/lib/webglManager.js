@@ -10,8 +10,8 @@ const DIRECTIONAL_LIGHT_PARAM = {
     color: 0xffffff,
     intensity: 1.0,
     x: 1.0,
-    y: 1.0,
-    z: 5.0
+    y: 5.0,
+    z: 10.0
 };
 
 const COLOR_PALLETE = {
@@ -20,10 +20,10 @@ const COLOR_PALLETE = {
     skyblue: "#197CE4"
 };
 
-const SPHERE_POS = [
-    { x: 1.7, y: 2.4, z: 6.3 },
-    { x: -2.3, y: 0.0, z: 5.3 },
-    { x: 0.7, y: -2.8, z: 4.8 }
+const BOX_POS = [
+    { x: 0.0, y: 0.0, z: 0.0 },
+    { x: 0.0, y: 0.0, z: 0.0 },
+    { x: 0.0, y: 0.0, z: 0.0 }
 ];
 
 export default class WebglManager {
@@ -35,27 +35,25 @@ export default class WebglManager {
         this.camera = null;
         this.light = null;
 
-        this.sphereMeshList = [];
+        this.meshList = [];
     }
 
     init() {
         this.setupWebgl();
         this.resize();
 
-        // gsap.ticker.add(time => {
-        //     this.uniforms.uTime.value = time;
-        //     this.renderer.render(this.scene, this.camera);
-
-        //     if (this.sphereMeshList) {
-        //         this.sphereMeshList.forEach(mesh => {
-        //             mesh.position.x += Math.cos(time) * Math.random() * 0.001;
-        //             mesh.position.y +=
-        //                 easing.easeInOutCubic(Math.sin(time * 0.1)) *
-        //                 Math.random() *
-        //                 0.001;
-        //         });
-        //     }
-        // });
+        gsap.ticker.add(time => {
+            this.renderer.render(this.scene, this.camera);
+            //     if (this.meshList) {
+            //         this.meshList.forEach(mesh => {
+            //             mesh.position.x += Math.cos(time) * Math.random() * 0.001;
+            //             mesh.position.y +=
+            //                 easing.easeInOutCubic(Math.sin(time * 0.1)) *
+            //                 Math.random() *
+            //                 0.001;
+            //         });
+            //     }
+        });
 
         window.addEventListener("resize", () => {
             this.resize();
@@ -67,28 +65,26 @@ export default class WebglManager {
             canvas: this.canvas,
             alpha: true
         });
-        this.renderer.setClearColor(new THREE.Color(0xffffff));
+        this.renderer.setClearColor(new THREE.Color(0x555555));
 
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(
             45,
             window.innerWidth / window.innerHeight
         );
-        this.camera.position.set(0, 0, +14);
-        // spehre
-        this.geometry = new THREE.BoxGeometry(16.0, 16.0, 16.0);
+        this.camera.position.set(0, 0, +10);
 
-        // マテリアルのパラメータ
         const MATERIAL_PARAM = {
-            color: 0xff00ff,
-            specular: 0xffffff
+            color: 0x00007f
         };
+        this.geometry = new THREE.BoxGeometry(1.0, 1.0, 1.0);
+        this.material = new THREE.MeshLambertMaterial(MATERIAL_PARAM);
 
-        SPHERE_POS.forEach(pos => {
-            const mesh = new THREE.Mesh(this.geometry, MATERIAL_PARAM);
+        BOX_POS.forEach(pos => {
+            const mesh = new THREE.Mesh(this.geometry, this.material);
             mesh.position.set(pos.x, pos.y, pos.z);
             this.scene.add(mesh);
-            this.sphereMeshList.push(mesh);
+            this.meshList.push(mesh);
         });
 
         this.light = new THREE.DirectionalLight(
