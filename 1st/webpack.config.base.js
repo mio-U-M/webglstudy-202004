@@ -7,7 +7,7 @@ const path = require("path");
 
 // base config
 const SRC = "./src";
-const DEST = "../dist";
+const DEST = "../docs";
 const HOST = process.env.HOST || "0.0.0.0";
 const PORT = process.env.PORT || 3000;
 
