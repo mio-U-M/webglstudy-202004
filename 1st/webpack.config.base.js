@@ -31,7 +31,7 @@ module.exports = {
     },
     // 出力するディレクトリ・ファイル名などの設定
     output: {
-        path: path.resolve(__dirname, DEST + BASE_DIR),
+        path: path.resolve(__dirname, DEST),
         filename: "[name]",
         publicPath: BASE_DIR
     },
