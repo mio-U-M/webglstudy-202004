@@ -15,6 +15,7 @@
     "babel-preset-env": "^1.6.1",
     "css-loader": "^0.28.11",
     "css-mqpacker": "^6.0.2",
+    "dat.gui": "^0.7.7",
     "extract-text-webpack-plugin": "next",
     "file-loader": "^1.1.11",
     "glob": "^7.1.2",

@@ -31,6 +31,10 @@ const BOX_COUNT = {
     y: 10
 };
 
+const MATERIAL_PARAM = {
+    color: 0xe0007f
+};
+
 export default class WebglManager {
     constructor(canvas) {
         this.canvas = canvas;
@@ -49,19 +53,37 @@ export default class WebglManager {
 
         gsap.ticker.add(time => {
             this.renderer.render(this.scene, this.camera);
-            //     if (this.meshList) {
-            //         this.meshList.forEach(mesh => {
-            //             mesh.position.x += Math.cos(time) * Math.random() * 0.001;
-            //             mesh.position.y +=
-            //                 easing.easeInOutCubic(Math.sin(time * 0.1)) *
-            //                 Math.random() *
-            //                 0.001;
-            //         });
-            //     }
+
+            // this.meshList.forEach(mesh => {});
+
+            if (this.isSpaceDown) {
+                this.meshList.forEach((mesh, i) => {
+                    mesh.rotation.x += 0.07 * mesh.param;
+                    mesh.rotation.y += 0.07 * mesh.param;
+                    mesh.rotation.z += 0.07 * mesh.param;
+                    mesh.material.color.setHSL(
+                        i * Math.sin(time) * 0.01,
+                        1.0,
+                        0.5
+                    );
+                });
+            }
         });
 
         window.addEventListener("resize", () => {
             this.resize();
+        });
+        // key
+        window.addEventListener("keydown", eve => {
+            if (eve.key === " ") this.isSpaceDown = true;
+        });
+        window.addEventListener("keyup", eve => {
+            if (this.isSpaceDown) {
+                this.isSpaceDown = false;
+                this.meshList.forEach(mesh => {
+                    gsap.to(mesh.rotation, 0.5, { x: 0, y: 0, z: 0 });
+                });
+            }
         });
     }
 
@@ -70,18 +92,15 @@ export default class WebglManager {
             canvas: this.canvas,
             alpha: true
         });
-        this.renderer.setClearColor(new THREE.Color(0x555555));
+        this.renderer.setClearColor(new THREE.Color(0x222222));
 
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(
-            45,
+            60,
             window.innerWidth / window.innerHeight
         );
         this.camera.position.set(0, 0, +10);
 
-        const MATERIAL_PARAM = {
-            color: 0x00007f
-        };
         this.geometry = new THREE.BoxGeometry(
             BOX_SIZE.w,
             BOX_SIZE.h,
@@ -89,15 +108,16 @@ export default class WebglManager {
         );
         this.material = new THREE.MeshLambertMaterial(MATERIAL_PARAM);
 
-        for (let ypos = 1; ypos < BOX_COUNT.y; ypos++) {
-            for (let xpos = 1; xpos < BOX_COUNT.x; xpos++) {
+        for (let ypos = 0; ypos < BOX_COUNT.y; ypos++) {
+            for (let xpos = 0; xpos < BOX_COUNT.x; xpos++) {
                 const mesh = new THREE.Mesh(this.geometry, this.material);
                 mesh.position.set(
-                    0.5 * BOX_SIZE.w * (xpos - BOX_COUNT.x * 0.5),
-                    0.5 * BOX_SIZE.h * (ypos - BOX_COUNT.y * 0.5),
+                    1.0 * BOX_SIZE.w * (xpos - BOX_COUNT.x * 0.5) + 0.5,
+                    1.0 * BOX_SIZE.h * (ypos - BOX_COUNT.y * 0.5) + 0.5,
                     0
                 );
                 this.scene.add(mesh);
+                mesh.param = ((Math.random() + Math.random()) / 2) * 1.5;
                 this.meshList.push(mesh);
             }
         }
