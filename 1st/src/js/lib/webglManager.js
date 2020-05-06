@@ -20,11 +20,16 @@ const COLOR_PALLETE = {
     skyblue: "#197CE4"
 };
 
-const BOX_POS = [
-    { x: 0.0, y: 0.0, z: 0.0 },
-    { x: 0.0, y: 0.0, z: 0.0 },
-    { x: 0.0, y: 0.0, z: 0.0 }
-];
+const BOX_SIZE = {
+    w: 1.0,
+    h: 1.0,
+    d: 1.0
+};
+
+const BOX_COUNT = {
+    x: 10,
+    y: 10
+};
 
 export default class WebglManager {
     constructor(canvas) {
@@ -77,15 +82,25 @@ export default class WebglManager {
         const MATERIAL_PARAM = {
             color: 0x00007f
         };
-        this.geometry = new THREE.BoxGeometry(1.0, 1.0, 1.0);
+        this.geometry = new THREE.BoxGeometry(
+            BOX_SIZE.w,
+            BOX_SIZE.h,
+            BOX_SIZE.d
+        );
         this.material = new THREE.MeshLambertMaterial(MATERIAL_PARAM);
 
-        BOX_POS.forEach(pos => {
-            const mesh = new THREE.Mesh(this.geometry, this.material);
-            mesh.position.set(pos.x, pos.y, pos.z);
-            this.scene.add(mesh);
-            this.meshList.push(mesh);
-        });
+        for (let ypos = 1; ypos < BOX_COUNT.y; ypos++) {
+            for (let xpos = 1; xpos < BOX_COUNT.x; xpos++) {
+                const mesh = new THREE.Mesh(this.geometry, this.material);
+                mesh.position.set(
+                    0.5 * BOX_SIZE.w * (xpos - BOX_COUNT.x * 0.5),
+                    0.5 * BOX_SIZE.h * (ypos - BOX_COUNT.y * 0.5),
+                    0
+                );
+                this.scene.add(mesh);
+                this.meshList.push(mesh);
+            }
+        }
 
         this.light = new THREE.DirectionalLight(
             DIRECTIONAL_LIGHT_PARAM.color,
