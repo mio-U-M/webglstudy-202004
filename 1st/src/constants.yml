@@ -1,2 +1,2 @@
-BASE_DIR: /
-IMG_DIR: /img
+BASE_DIR: public/1st
+IMG_DIR: public/1st/img
