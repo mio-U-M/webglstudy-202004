@@ -1,0 +1,19 @@
+extends /layout/_default-layout
+
+prepend config-block
+  - page_name = ''
+
+//- append stylesheet-block
+
+//- append javascript-block
+
+block content-block
+  header.header
+    p: span.js-title Assignment #01
+  .container
+    .canvas
+      canvas.js-view
+    p.explain.js-explain Press Space Key!
+    .cover
+      .cover-gradient.js-gradient
+      .cover-overlay.js-overlay

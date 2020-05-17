@@ -1,0 +1,18 @@
+// reset css
+@import "../../node_modules/reset.css/reset.css";
+
+@import url("https://fonts.googleapis.com/css?family=Oswald|Press+Start+2P&display=swap");
+// SASS
+@import "variable";
+@import "function";
+@import "mixin";
+
+// @keyframes
+@import "keyframes";
+
+// base style
+@import "base";
+
+// modules
+@import "module/wrapper";
+@import "module/main";

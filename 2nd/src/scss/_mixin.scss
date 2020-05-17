@@ -1,0 +1,100 @@
+@mixin pc-layout {
+    @media (min-width: $pc_min_width + 1) {
+        @content;
+    }
+}
+
+@mixin sp-layout {
+    @media (max-width: ($pc_min_width)) {
+        @content;
+    }
+}
+
+@mixin fixed-size-img($path, $ratio: 1) {
+    width: width($path, $ratio);
+    height: height($path, $ratio);
+    background-image: resolve($path);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: transparent;
+}
+
+@mixin sprite-img-num($path) {
+    display: block;
+    background-image: resolve($path);
+    background-repeat: no-repeat;
+    color: transparent;
+}
+
+@mixin sprite-img($path, $ratio: 1) {
+    display: block;
+    width: width($path, $ratio);
+    height: height($path, $ratio * 2);
+    background-image: resolve($path);
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    background-position: top center;
+    color: transparent;
+}
+
+@mixin flex-bg-img($path, $width, $height) {
+    padding-bottom: (100% * $height / $width);
+    background-image: resolve($path);
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+@mixin solid-bg-img($path, $width, $height, $ratio: 1) {
+    width: $width;
+    height: $height;
+    background-image: resolve($path);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+@mixin repeat-bg-img($path) {
+    display: block;
+    width: 100%;
+    height: auto;
+    background-image: resolve($path);
+    background-repeat: repeat;
+    background-position: top center;
+}
+
+@mixin repeatx-bg-img($path, $ratio: 1) {
+    display: block;
+    width: 100%;
+    height: height($path, $ratio);
+    background-image: resolve($path);
+    background-repeat: repeat-x;
+    background-position: top center;
+}
+
+@mixin abs-center {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+@mixin flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin form-style-reset {
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: 0;
+    outline: none;
+    appearance: none;
+    overflow: visible;
+  }
