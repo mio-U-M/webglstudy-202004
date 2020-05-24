@@ -20,25 +20,25 @@ tl.set(".js-title", { opacity: 1 }, 0.3)
         0.8,
         {
             opacity: 0,
-            ease: "sine.out",
-            onComplete: () => setTextAnimation()
+            ease: "sine.out"
+            // onComplete: () => setTextAnimation()
         },
         "-=0.4"
     );
 
 manager.on("rotate", () => {
-    texttl.pause();
+    // texttl.pause();
     gsap.to(".js-explain", 0.5, { opacity: 0 });
 });
 
 manager.on("stop", () => {
-    texttl.play("beginning");
+    // texttl.play("beginning");
 });
 
-function setTextAnimation() {
-    texttl = gsap.timeline({ repeat: -1 });
-    texttl.addLabel("beginning");
-    texttl.set(".js-explain", { opacity: 0 });
-    texttl.to(".js-explain", 1.0, { opacity: 1, ease: "sine.in" }, 0);
-    texttl.to(".js-explain", 1.0, { opacity: 0, ease: "sine.in" }, "+=0.0");
-}
+// function setTextAnimation() {
+//     texttl = gsap.timeline({ repeat: -1 });
+//     texttl.addLabel("beginning");
+//     texttl.set(".js-explain", { opacity: 0 });
+//     texttl.to(".js-explain", 1.0, { opacity: 1, ease: "sine.in" }, 0);
+//     texttl.to(".js-explain", 1.0, { opacity: 0, ease: "sine.in" }, "+=0.0");
+// }

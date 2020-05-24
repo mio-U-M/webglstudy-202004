@@ -1,6 +1,7 @@
 import gsap from "gsap";
 import * as THREE from "three";
 import EventEmitter from "events";
+import { threeTextureLoad } from "./threeTextureLoader";
 // import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 // import { easing } from "../lib/easing";
 
@@ -27,6 +28,11 @@ const MATERIAL_PARAM = {
     color: 0xe0007f
 };
 
+const TEXTURES = {
+    triangleFill: "triangle-fill.png",
+    triangleLine: "triangle-line.png"
+};
+
 export default class WebglManager extends EventEmitter {
     constructor(canvas) {
         super();
@@ -42,51 +48,21 @@ export default class WebglManager extends EventEmitter {
     }
 
     init() {
+        await this.loadTexture();
         this.setupWebgl();
         this.resize();
 
         gsap.ticker.add(time => {
             this.renderer.render(this.scene, this.camera);
-
-            if (this.isSpaceDown) {
-                this.meshList.forEach((mesh, i) => {
-                    mesh.rotation.x += 0.07 * mesh.param;
-                    mesh.rotation.y += 0.07 * mesh.param;
-                    mesh.rotation.z += 0.07 * mesh.param;
-                    mesh.material.color.setHSL(
-                        i * Math.sin(time) * 0.01,
-                        1.0,
-                        0.5
-                    );
-                });
-            }
         });
 
         window.addEventListener("resize", () => {
             this.resize();
         });
-        // key
-        window.addEventListener("keydown", eve => {
-            if (eve.key === " ") {
-                this.emit("rotate");
-                this.isSpaceDown = true;
-            }
-        });
-        window.addEventListener("keyup", eve => {
-            if (this.isSpaceDown) {
-                this.isSpaceDown = false;
-                this.meshList.forEach(mesh => {
-                    gsap.to(mesh.rotation, 0.5, {
-                        x: 0,
-                        y: 0,
-                        z: 0,
-                        onComplete: () => {
-                            this.emit("stop");
-                        }
-                    });
-                });
-            }
-        });
+    }
+
+    async loadTexture() {
+        this.textures = await threeTextureLoad(TEXTURES);
     }
 
     setupWebgl() {
@@ -102,36 +78,6 @@ export default class WebglManager extends EventEmitter {
             window.innerWidth / window.innerHeight
         );
         this.camera.position.set(0, 0, +10);
-
-        this.geometry = new THREE.BoxGeometry(
-            BOX_SIZE.w,
-            BOX_SIZE.h,
-            BOX_SIZE.d
-        );
-        this.material = new THREE.MeshLambertMaterial(MATERIAL_PARAM);
-
-        for (let ypos = 0; ypos < BOX_COUNT.y; ypos++) {
-            for (let xpos = 0; xpos < BOX_COUNT.x; xpos++) {
-                const mesh = new THREE.Mesh(this.geometry, this.material);
-                mesh.position.set(
-                    1.0 * BOX_SIZE.w * (xpos - BOX_COUNT.x * 0.5) + 0.5,
-                    1.0 * BOX_SIZE.h * (ypos - BOX_COUNT.y * 0.5) + 0.5,
-                    0
-                );
-                this.scene.add(mesh);
-                mesh.param = ((Math.random() + Math.random()) / 2) * 1.5;
-                this.meshList.push(mesh);
-            }
-        }
-
-        this.light = new THREE.DirectionalLight(
-            DIRECTIONAL_LIGHT_PARAM.color,
-            DIRECTIONAL_LIGHT_PARAM.intensity
-        );
-        this.light.position.x = DIRECTIONAL_LIGHT_PARAM.x;
-        this.light.position.y = DIRECTIONAL_LIGHT_PARAM.y;
-        this.light.position.z = DIRECTIONAL_LIGHT_PARAM.z;
-        this.scene.add(this.light);
 
         const axes = new THREE.AxesHelper(25);
         this.scene.add(axes);
