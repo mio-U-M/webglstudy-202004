@@ -1,28 +1,22 @@
-import { IMG_DIR } from "../constants.yml";
+import { IMG_DIR } from "../../constants.yml";
+import * as THREE from "three";
 
 // ひとまずobjectでくる想定
 export function threeTextureLoad(textures) {
     const texturePromises = [];
     const loadedTextures = {};
+    const loader = new THREE.TextureLoader();
 
     for (var key in textures) {
         texturePromises.push(
             new Promise((resolve, reject) => {
                 const entry = textures[key];
-                const url = IMG_DIR + entry.url;
+                const url = `${IMG_DIR}/${entry}`;
                 loader.load(
                     url,
                     texture => {
                         loadedTextures[key] = texture;
-                        if (entry.val instanceof THREE.Texture) resolve(entry);
-                    },
-                    xhr => {
-                        console.log(
-                            url +
-                                " " +
-                                (xhr.loaded / xhr.total) * 100 +
-                                "% loaded"
-                        );
+                        if (texture instanceof THREE.Texture) resolve();
                     },
                     xhr => {
                         reject(

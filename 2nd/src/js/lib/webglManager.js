@@ -2,7 +2,7 @@ import gsap from "gsap";
 import * as THREE from "three";
 import EventEmitter from "events";
 import { threeTextureLoad } from "./threeTextureLoader";
-// import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 // import { easing } from "../lib/easing";
 
 const DIRECTIONAL_LIGHT_PARAM = {
@@ -25,7 +25,13 @@ const BOX_COUNT = {
 };
 
 const MATERIAL_PARAM = {
-    color: 0xe0007f
+    color: 0xff9933, // 頂点の色
+    size: 0.5, // 頂点の基本となるサイズ @@@
+    sizeAttenuation: true, // 遠近感を出すかどうかの真偽値
+    opacity: 0.8, // 不透明度 @@@
+    transparent: true, // 透明度を有効化するかどうか @@@
+    // blending: THREE.AdditiveBlending, // 加算合成モードで色を混ぜる @@@
+    depthWrite: false // 深度値を書き込むかどうか @@@
 };
 
 const TEXTURES = {
@@ -47,7 +53,7 @@ export default class WebglManager extends EventEmitter {
         this.meshList = [];
     }
 
-    init() {
+    async init() {
         await this.loadTexture();
         this.setupWebgl();
         this.resize();
@@ -70,7 +76,7 @@ export default class WebglManager extends EventEmitter {
             canvas: this.canvas,
             alpha: true
         });
-        this.renderer.setClearColor(new THREE.Color(0x222222));
+        this.renderer.setClearColor(new THREE.Color(0xdddddd));
 
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(
@@ -82,10 +88,29 @@ export default class WebglManager extends EventEmitter {
         const axes = new THREE.AxesHelper(25);
         this.scene.add(axes);
 
-        // this.controls = new OrbitControls(
-        //     this.camera,
-        //     this.renderer.domElement
-        // );
+        // point sprite
+        this.materialPoint = new THREE.PointsMaterial(MATERIAL_PARAM);
+        this.materialPoint.map = this.textures.triangleLine;
+        // geometry
+        this.geomerty = new THREE.Geometry(); // プレーンなジオメトリ
+        const COUNT = 1000;
+        const SIZE = 30.0;
+        for (let i = 0; i <= COUNT; ++i) {
+            // Math.random は 0 以上 1 未満の数値をランダムで返す
+            const x = (Math.random() - 0.5) * 2.0 * SIZE;
+            const y = (Math.random() - 0.5) * 2.0 * SIZE;
+            const z = (Math.random() - 0.5) * 2.0 * SIZE;
+            const point = new THREE.Vector3(x, y, z);
+            this.geomerty.vertices.push(point);
+        }
+
+        this.point = new THREE.Points(this.geomerty, this.materialPoint);
+        this.scene.add(this.point);
+
+        this.controls = new OrbitControls(
+            this.camera,
+            this.renderer.domElement
+        );
     }
 
     resize() {
