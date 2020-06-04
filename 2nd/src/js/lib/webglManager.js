@@ -13,20 +13,10 @@ const DIRECTIONAL_LIGHT_PARAM = {
     z: 10.0
 };
 
-const BOX_SIZE = {
-    w: 1.0,
-    h: 1.0,
-    d: 1.0
-};
-
-const BOX_COUNT = {
-    x: 10,
-    y: 10
-};
+const COLOR_LIST = [0x57d1c9, 0xed5485, 0xfffbcb, 0xffe869];
 
 const MATERIAL_PARAM = {
-    color: 0xff9933, // 頂点の色
-    size: 0.5, // 頂点の基本となるサイズ @@@
+    size: 0.8, // 頂点の基本となるサイズ @@@
     sizeAttenuation: true, // 遠近感を出すかどうかの真偽値
     opacity: 0.8, // 不透明度 @@@
     transparent: true, // 透明度を有効化するかどうか @@@
@@ -50,7 +40,8 @@ export default class WebglManager extends EventEmitter {
         this.camera = null;
         this.light = null;
 
-        this.meshList = [];
+        this.materialPointList = [];
+        this.pointList = [];
     }
 
     async init() {
@@ -85,27 +76,34 @@ export default class WebglManager extends EventEmitter {
         );
         this.camera.position.set(0, 0, +10);
 
-        const axes = new THREE.AxesHelper(25);
-        this.scene.add(axes);
+        // const axes = new THREE.AxesHelper(25);
+        // this.scene.add(axes);
 
-        // point sprite
-        this.materialPoint = new THREE.PointsMaterial(MATERIAL_PARAM);
-        this.materialPoint.map = this.textures.triangleLine;
-        // geometry
-        this.geomerty = new THREE.Geometry(); // プレーンなジオメトリ
-        const COUNT = 1000;
+        const COUNT = 500;
         const SIZE = 30.0;
-        for (let i = 0; i <= COUNT; ++i) {
-            // Math.random は 0 以上 1 未満の数値をランダムで返す
-            const x = (Math.random() - 0.5) * 2.0 * SIZE;
-            const y = (Math.random() - 0.5) * 2.0 * SIZE;
-            const z = (Math.random() - 0.5) * 2.0 * SIZE;
-            const point = new THREE.Vector3(x, y, z);
-            this.geomerty.vertices.push(point);
-        }
 
-        this.point = new THREE.Points(this.geomerty, this.materialPoint);
-        this.scene.add(this.point);
+        Object.keys(TEXTURES).forEach((key, index) => {
+            const material = new THREE.PointsMaterial(MATERIAL_PARAM);
+            material.color = new THREE.Color(
+                COLOR_LIST[index % COLOR_LIST.length]
+            );
+            material.map = this.textures[key];
+            this.materialPointList.push(material);
+
+            const geomerty = new THREE.Geometry();
+            for (let i = 0; i <= COUNT; ++i) {
+                // Math.random は 0 以上 1 未満の数値をランダムで返す
+                const x = (Math.random() - 0.5) * 2.0 * SIZE;
+                const y = (Math.random() - 0.5) * 2.0 * SIZE;
+                const z = (Math.random() - 0.5) * 2.0 * SIZE;
+                const point = new THREE.Vector3(x, y, z);
+                geomerty.vertices.push(point);
+            }
+
+            const pointMesh = new THREE.Points(geomerty, material);
+            this.scene.add(pointMesh);
+            this.pointList.push(pointMesh);
+        });
 
         this.controls = new OrbitControls(
             this.camera,

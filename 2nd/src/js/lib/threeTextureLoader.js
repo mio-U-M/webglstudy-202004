@@ -7,7 +7,7 @@ export function threeTextureLoad(textures) {
     const loadedTextures = {};
     const loader = new THREE.TextureLoader();
 
-    for (var key in textures) {
+    Object.keys(textures).forEach(key => {
         texturePromises.push(
             new Promise((resolve, reject) => {
                 const entry = textures[key];
@@ -30,7 +30,7 @@ export function threeTextureLoad(textures) {
                 );
             })
         );
-    }
+    });
 
     return Promise.all(texturePromises).then(() => {
         return loadedTextures;
