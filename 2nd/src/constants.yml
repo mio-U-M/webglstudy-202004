@@ -1,2 +1,3 @@
 BASE_DIR: /webglstudy-202004/public/2nd
-IMG_DIR: /img
+IMG_DIR: /webglstudy-202004/public/2nd/img
+IMG_DIR_DEV: /img
