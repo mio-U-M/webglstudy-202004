@@ -84,3 +84,24 @@
         }
     }
 }
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 1;
+
+    p {
+        font-size: 20px;
+        margin: 15px 20px;
+        font-family: "Oswald", sans-serif;
+        color: #fff;
+        overflow: hidden;
+
+        span {
+            display: block;
+            // for animation
+            opacity: 0;
+        }
+    }
+}

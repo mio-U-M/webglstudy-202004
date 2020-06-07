@@ -6,6 +6,8 @@ const manager = new WebglManager(view);
 
 // setting
 gsap.set(".js-title", { yPercent: 100 });
+gsap.set(".js-explain", { yPercent: 100 });
+
 manager.init();
 
 // animation
@@ -19,25 +21,13 @@ tl.set(".js-title", { opacity: 1 }, 0.3)
         0.8,
         {
             opacity: 0,
-            ease: "sine.out"
-            // onComplete: () => setTextAnimation()
+            ease: "sine.out",
+            onStart: () => setTextAnimation()
         },
         "-=0.4"
     );
 
-manager.on("rotate", () => {
-    // texttl.pause();
-    gsap.to(".js-explain", 0.5, { opacity: 0 });
-});
-
-manager.on("stop", () => {
-    // texttl.play("beginning");
-});
-
-// function setTextAnimation() {
-//     texttl = gsap.timeline({ repeat: -1 });
-//     texttl.addLabel("beginning");
-//     texttl.set(".js-explain", { opacity: 0 });
-//     texttl.to(".js-explain", 1.0, { opacity: 1, ease: "sine.in" }, 0);
-//     texttl.to(".js-explain", 1.0, { opacity: 0, ease: "sine.in" }, "+=0.0");
-// }
+function setTextAnimation() {
+    gsap.set(".js-explain", { opacity: 1 }, 0);
+    gsap.to(".js-explain", 0.8, { yPercent: 0, ease: "sine.in", delay: 0.1 });
+}

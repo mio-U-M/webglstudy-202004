@@ -46,6 +46,8 @@ export default class WebglManager extends EventEmitter {
         this.materialPointList = [];
         this.pointList = [];
         this.mapedTextures = [];
+
+        this.isCameraRotate = false;
     }
 
     async init() {
@@ -54,11 +56,36 @@ export default class WebglManager extends EventEmitter {
         this.resize();
 
         gsap.ticker.add(time => {
+            if (this.isCameraRotate) {
+                this.camera.rotation.y += 0.03;
+            }
+
+            this.camera.rotation.y += 0.001;
+
             this.renderer.render(this.scene, this.camera);
         });
 
         window.addEventListener("resize", () => {
             this.resize();
+        });
+
+        // key
+        window.addEventListener("keydown", eve => {
+            if (eve.key === " ") {
+                this.isCameraRotate = true;
+            }
+        });
+        window.addEventListener("keyup", () => {
+            if (this.isCameraRotate) {
+                this.isCameraRotate = false;
+            }
+        });
+        // touchevent
+        window.addEventListener("touchstart", () => {
+            this.isCameraRotate = true;
+        });
+        window.addEventListener("touchend", () => {
+            this.isCameraRotate = false;
         });
     }
 
@@ -79,6 +106,7 @@ export default class WebglManager extends EventEmitter {
             window.innerWidth / window.innerHeight
         );
         this.camera.position.set(0, 0, +10);
+        // this.camera.lookAt(new THREE.Vector3(0, 0, 0));
 
         // const axes = new THREE.AxesHelper(25);
         // this.scene.add(axes);
@@ -110,10 +138,10 @@ export default class WebglManager extends EventEmitter {
             this.pointList.push(pointMesh);
         });
 
-        this.controls = new OrbitControls(
-            this.camera,
-            this.renderer.domElement
-        );
+        // this.controls = new OrbitControls(
+        //     this.camera,
+        //     this.renderer.domElement
+        // );
     }
 
     resize() {
