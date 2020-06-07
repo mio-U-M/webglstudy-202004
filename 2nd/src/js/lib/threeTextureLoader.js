@@ -11,7 +11,7 @@ export function threeTextureLoad(textures) {
         texturePromises.push(
             new Promise((resolve, reject) => {
                 const entry = textures[key];
-                const url = `${IMG_DIR_DEV}/${entry}`;
+                const url = `${IMG_DIR}/${entry}`;
                 loader.load(
                     url,
                     texture => {
