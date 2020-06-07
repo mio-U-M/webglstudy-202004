@@ -1,4 +1,4 @@
-import { IMG_DIR } from "../../constants.yml";
+import { IMG_DIR, IMG_DIR_DEV } from "../../constants.yml";
 import * as THREE from "three";
 
 // ひとまずobjectでくる想定
