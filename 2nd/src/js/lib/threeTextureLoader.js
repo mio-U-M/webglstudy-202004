@@ -1,4 +1,4 @@
-import { IMG_DIR } from "../../constants.yml";
+import { IMG_DIR, IMG_DIR_DEV } from "../../constants.yml";
 import * as THREE from "three";
 
 // ひとまずobjectでくる想定
@@ -11,7 +11,7 @@ export function threeTextureLoad(textures) {
         texturePromises.push(
             new Promise((resolve, reject) => {
                 const entry = textures[key];
-                const url = `${IMG_DIR}/${entry}`;
+                const url = `${IMG_DIR_DEV}/${entry}`;
                 loader.load(
                     url,
                     texture => {
