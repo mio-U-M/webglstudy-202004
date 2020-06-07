@@ -6,7 +6,6 @@ const manager = new WebglManager(view);
 
 // setting
 gsap.set(".js-title", { yPercent: 100 });
-gsap.set(".js-explain", { opacity: 0 });
 manager.init();
 
 // animation
