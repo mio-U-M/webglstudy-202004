@@ -1,4 +1,5 @@
 import WebglManager from "./lib/webglManager";
+import { preventScroll } from "./lib/toggleScroll";
 import gsap from "gsap";
 
 const view = document.querySelector(".js-view");
@@ -9,6 +10,7 @@ gsap.set(".js-title", { yPercent: 100 });
 gsap.set(".js-explain", { yPercent: 100 });
 
 manager.init();
+preventScroll();
 
 // animation
 const tl = gsap.timeline();
